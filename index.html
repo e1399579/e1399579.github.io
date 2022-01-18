@@ -1,0 +1,213 @@
+<!DOCTYPE html>
+<html lang="zh">
+<head>
+    <meta charset="UTF-8">
+    <title>坦克大战</title>
+    <style>
+        #stage {
+            text-rendering: geometricPrecision;
+        }
+
+        canvas {
+            position: absolute;
+        }
+
+        #layer1 {
+            z-index: 1;
+        }
+
+        #layer2 {
+            z-index: 2;
+        }
+
+        #layer3 {
+            z-index: 3;
+        }
+
+        #layer4 {
+            z-index: 4;
+        }
+
+        .box {
+            display: flex;
+            align-items: center;
+        }
+
+        #desc table {
+            border-collapse: collapse;
+            border-spacing: 0;
+            width: 232px;
+            margin-left: 1em;
+            margin-block-end: 1em;
+        }
+
+        #desc table td {
+            padding: 5px;
+            border: 1px dashed #ccc;
+        }
+    </style>
+</head>
+<body>
+<div class="box">
+    <div id="stage">
+        <canvas id="layer1"></canvas>
+        <canvas id="layer2"></canvas>
+        <canvas id="layer3"></canvas>
+        <canvas id="layer4"></canvas>
+    </div>
+    <div id="desc">
+        <table title="NES Gamepad">
+            <thead>
+            <tr>
+                <th>游戏手柄(NES gamepad)</th>
+            </tr>
+            </thead>
+            <tbody>
+            <tr>
+                <td><img src="./images/NES_gamepad.gif" alt="NES" /></td>
+            </tr>
+            </tbody>
+        </table>
+        <table title="Gamepad Control">
+            <thead>
+            <tr>
+                <th colspan="3">按键说明(Gamepad control)</th>
+            </tr>
+            </thead>
+            <tbody>
+            <tr>
+                <td>按键</td>
+                <td>玩家1</td>
+                <td>玩家2</td>
+            </tr>
+            <tr>
+                <td>↑</td>
+                <td>W</td>
+                <td>↑</td>
+            </tr>
+            <tr>
+                <td>↓</td>
+                <td>S</td>
+                <td>↓</td>
+            </tr>
+            <tr>
+                <td>←</td>
+                <td>A</td>
+                <td>←</td>
+            </tr>
+            <tr>
+                <td>→</td>
+                <td>D</td>
+                <td>→</td>
+            </tr>
+            <tr>
+                <td>A</td>
+                <td>J</td>
+                <td>NUM 1</td>
+            </tr>
+            <tr>
+                <td>B</td>
+                <td>K</td>
+                <td>NUM 2</td>
+            </tr>
+            <tr>
+                <td>SELECT</td>
+                <td>Space</td>
+                <td>-</td>
+            </tr>
+            <tr>
+                <td>START</td>
+                <td>Enter</td>
+                <td>-</td>
+            </tr>
+            </tbody>
+        </table>
+    </div>
+</div>
+<script src="./js/Constant.js"></script>
+<script src="./js/logic/misc/util.js"></script>
+<script src="./js/logic/misc/TaskSchedule.js"></script>
+
+<script src="./js/logic/tank/Unit.js"></script>
+<script src="./js/logic/tank/Bullet.js"></script>
+<script src="./js/logic/tank/Tank.js"></script>
+<script src="./js/logic/tank/AITank.js"></script>
+<script src="./js/logic/tank/PlayerTank.js"></script>
+<script src="./js/logic/tank/Armor.js"></script>
+<script src="./js/logic/tank/Basic.js"></script>
+<script src="./js/logic/tank/Fast.js"></script>
+<script src="./js/logic/tank/Player2.js"></script>
+<script src="./js/logic/tank/Player1.js"></script>
+<script src="./js/logic/tank/Power.js"></script>
+
+<script src="./js/logic/props/Prop.js"></script>
+<script src="./js/logic/props/Grenade.js"></script>
+<script src="./js/logic/props/Gun.js"></script>
+<script src="./js/logic/props/Helmet.js"></script>
+<script src="./js/logic/props/Shovel.js"></script>
+<script src="./js/logic/props/Star.js"></script>
+<script src="./js/logic/props/TankLife.js"></script>
+<script src="./js/logic/props/Timer.js"></script>
+
+<script src="./js/logic/tile/Tile.js"></script>
+<script src="./js/logic/tile/Brick.js"></script>
+<script src="./js/logic/tile/Forest.js"></script>
+<script src="./js/logic/tile/Ice.js"></script>
+<script src="./js/logic/tile/River.js"></script>
+<script src="./js/logic/tile/Steel.js"></script>
+<script src="./js/logic/tile/Eagle.js"></script>
+<script src="./js/logic/tile/StageFactory.js"></script>
+
+<script src="./js/ui/animation/Animation.js"></script>
+<script src="./js/ui/animation/BlinkFrame.js"></script>
+<script src="./js/ui/animation/CloseFrame.js"></script>
+<script src="./js/ui/animation/OpenFrame.js"></script>
+<script src="./js/ui/animation/SwitchFrame.js"></script>
+<script src="./js/ui/animation/MoveFrame.js"></script>
+<script src="./js/ui/animation/RisingNumber.js"></script>
+<script src="./js/ui/animation/LingerFrame.js"></script>
+<script src="./js/ui/animation/GameOver.js"></script>
+<script src="./js/ui/animation/Bomb.js"></script>
+<script src="./js/ui/animation/Bomb2.js"></script>
+<script src="./js/ui/animation/Reborn.js"></script>
+<script src="./js/ui/animation/Score.js"></script>
+<script src="./js/ui/animation/Pause.js"></script>
+
+<script src="./js/ui/scene/Scene.js"></script>
+<script src="./js/ui/scene/Menu.js"></script>
+<script src="./js/ui/scene/Choose.js"></script>
+<script src="./js/ui/scene/Play.js"></script>
+<script src="./js/ui/scene/Settle.js"></script>
+<script src="./js/ui/scene/Over.js"></script>
+
+<script src="./js/logic/controller/Keyboard.js"></script>
+
+<script src="./js/logic/state/GameState.js"></script>
+<script src="./js/logic/state/Menus.js"></script>
+<script src="./js/logic/state/Choosing.js"></script>
+<script src="./js/logic/state/Playing.js"></script>
+<script src="./js/logic/state/Settling.js"></script>
+<script src="./js/logic/state/Overing.js"></script>
+<script src="./js/ui/GameAudio.js"></script>
+<script src="./js/logic/GameControl.js"></script>
+<script src="./js/ui/GameUI.js"></script>
+<script>
+    "use strict";
+    let layer1 = document.querySelector("#layer1");
+    let layer2 = document.querySelector("#layer2");
+    let layer3 = document.querySelector("#layer3");
+    let layer4 = document.querySelector("#layer4");
+    let ui = new GameUI([layer1, layer2, layer3, layer4]);
+    let control = new GameControl(ui);
+    ui.loadMaterials().then(() => {
+        control.action();
+    });
+
+    // 调整父元素宽高度
+    let stage = document.querySelector("#stage");
+    let range = ui.getRange();
+    stage.style.width = range[0] + "px";
+    stage.style.height = range[1] + "px";
+</script>
+</body>
+</html>
