@@ -1,7 +1,6 @@
 class GameControl {
     constructor(ui) {
         this.state = new Menus(this, ui);
-        // this.state = new Settling(this, ui);
         this.keyboard = new Keyboard(this.state);
         this.keyboard.listen();
     }
@@ -15,5 +14,13 @@ class GameControl {
 
     action() {
         this.state.action();
+    }
+
+    reset(ui) {
+        ui.stop().then(() => {
+            ui.reset();
+
+            this.setState(new Menus(this, ui));
+        });
     }
 }

@@ -122,6 +122,26 @@
             </tr>
             </tbody>
         </table>
+        <table>
+            <tbody>
+            <tr>
+                <td>
+                    <label for="zoom">缩放：</label>
+                    <select id="zoom">
+                        <option value="1">x1</option>
+                        <option value="2">x2</option>
+                        <option value="3" selected>x3</option>
+                        <option value="4">x4</option>
+                        <option value="5">x5</option>
+                        <option value="6">x6</option>
+                    </select>
+                </td>
+            </tr>
+            <tr>
+                <td>注：改变尺寸会重置游戏</td>
+            </tr>
+            </tbody>
+        </table>
     </div>
 </div>
 <script src="./js/Constant.js"></script>
@@ -203,11 +223,24 @@
         control.action();
     });
 
-    // 调整父元素宽高度
-    let stage = document.querySelector("#stage");
-    let range = ui.getRange();
-    stage.style.width = range[0] + "px";
-    stage.style.height = range[1] + "px";
+    function resize() {
+        // 调整父元素宽高度
+        let stage = document.querySelector("#stage");
+        let range = ui.getRange();
+        stage.style.width = range[0] + "px";
+        stage.style.height = range[1] + "px";
+    }
+    resize();
+
+    // 缩放
+    let zoom = document.querySelector("#zoom");
+    zoom.addEventListener("change", (event) => {
+        let val = parseInt(event.target.value);
+        ui.resize(val);
+        resize();
+
+        control.reset(ui);
+    });
 </script>
 </body>
 </html>

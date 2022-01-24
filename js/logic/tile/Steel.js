@@ -16,8 +16,4 @@ class Steel extends Tile {
         }
         return {changed: this.destroy, animations: [], audio: audio};
     }
-
-    canDestroy(tank) {
-        return (tank.getLevel() >= 4);
-    }
 }

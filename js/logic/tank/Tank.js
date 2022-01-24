@@ -12,7 +12,7 @@ class Tank extends Unit {
         this.counter = 0;
         this.bullets = [];
         this.bullet_speed = Constant.BASE_BULLET_SPEED * Constant.ZOOM;
-        this.fix_base = 8 * Constant.ZOOM;
+        this.fix_base = 4 * Constant.ZOOM;
         this.frame = 0;
         this.frame_index = 0;
         this.frame_state = this.frameState();
@@ -101,29 +101,28 @@ class Tank extends Unit {
         switch (direct) {
             case Constant.DIRECT_LEFT:
                 x -= this.speed;
-                y = this.alignY(y);
                 break;
             case Constant.DIRECT_UP:
                 y -= this.speed;
-                x = this.alignX(x);
                 break;
             case Constant.DIRECT_RIGHT:
                 x += this.speed;
-                y = this.alignY(y);
                 break;
             case Constant.DIRECT_DOWN:
                 y += this.speed;
-                x = this.alignX(x);
                 break;
         }
 
+        [x, y] = this.alignPoint(this.direct, direct, x, y);
         return {x, y};
     }
 
-    alignPoint() {
-        let x = this.x;
-        let y = this.y;
-        switch (this.direct) {
+    alignPoint(before_direct, after_direct, x, y) {
+        // 方向不变、反向，坐标不变
+        let diff = after_direct - before_direct;
+        if (0 === (diff & 1)) return [x, y];
+
+        switch (after_direct) {
             case Constant.DIRECT_LEFT:
                 y = this.alignY(y);
                 x = Math.min(x, this.x_max);
@@ -146,8 +145,7 @@ class Tank extends Unit {
                 break;
         }
 
-        this.x = x;
-        this.y = y;
+        return [x, y];
     }
 
     shot() {

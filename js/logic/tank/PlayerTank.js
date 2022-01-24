@@ -12,7 +12,6 @@ class PlayerTank extends Tank {
         this.skating = false;
         this.skating_frame = 18 * Constant.FRAME_FACTOR;
         this.keyup_frame = 0;
-        this.prev_direct = this.direct;
     }
 
     clearInvulnerable() {
@@ -36,11 +35,9 @@ class PlayerTank extends Tank {
     }
 
     setDirect(direct) {
+        // 转向时修正坐标
+        [this.x, this.y] = this.alignPoint(this.direct, direct, this.x, this.y);
         this.direct = direct;
-        if (this.prev_direct !== direct) {
-            this.alignPoint();
-        }
-        this.prev_direct = direct;
     }
 
     onKeydown(ga) {

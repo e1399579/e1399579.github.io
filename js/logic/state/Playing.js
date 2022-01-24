@@ -311,10 +311,14 @@ class Playing extends GameState {
             // 是否与建筑相交
             let element = this.isTankImpactTile(point, size, tank);
             if (element) {
-                // if (element.canDestroy(tank)) {
-                // }
-
-                this.chooseRightDirect(tank, this.isTankImpactTile);
+                if (element.canDestroy(tank)) {
+                    if (1 === Math.rand(1, 4)) {
+                    } else {
+                        this.chooseRightDirect(tank, this.isTankImpactTile);
+                    }
+                } else {
+                    this.chooseRightDirect(tank, this.isTankImpactTile);
+                }
 
                 continue;
             }
@@ -490,6 +494,7 @@ class Playing extends GameState {
             let destroy = be_shot.destroy;
             let audio = be_shot.audio;
             this.ui.ga.play(audio);
+            this.ui.ga.stop("player_move");
             this.animations.push(...be_shot.animations);
             if (!destroy) break;
 

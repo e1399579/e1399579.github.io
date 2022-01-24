@@ -3,15 +3,7 @@ class GameUI {
      * @param {HTMLCanvasElement[]} layers
      */
     constructor(layers) {
-        let canvas_width = Constant.BASE_SCREEN_WIDTH * Constant.ZOOM;
-        let canvas_height = Constant.BASE_SCREEN_HEIGHT * Constant.ZOOM;
-        for (let canvas of layers) {
-            canvas.width = canvas_width;
-            canvas.height = canvas_height;
-        }
-
-        this.screen_width = canvas_width;
-        this.screen_height = canvas_height;
+        this.layers = layers;
 
         this.scene = null;
         this.images = {};
@@ -19,17 +11,30 @@ class GameUI {
         this.frame = 0;
 
         this.canvas = layers[1];
-        this.ctx = this.canvas.getContext("2d", {alpha: true});
-
         this.bg1 = layers[0];
-        this.bg1_ctx = this.bg1.getContext("2d", {alpha: false});
-
         this.bg2 = layers[2];
-        this.bg2_ctx = this.bg2.getContext("2d", {alpha: true});
-
         this.bg3 = layers[3];
-        this.bg3_ctx = this.bg3.getContext("2d", {alpha: true});
+        this.resize(3);
 
+        this.ga = new GameAudio();
+    }
+
+    resize(zoom) {
+        Constant.ZOOM = zoom;
+        let canvas_width = Constant.BASE_SCREEN_WIDTH * Constant.ZOOM;
+        let canvas_height = Constant.BASE_SCREEN_HEIGHT * Constant.ZOOM;
+        for (let canvas of this.layers) {
+            canvas.width = canvas_width;
+            canvas.height = canvas_height;
+        }
+
+        this.screen_width = canvas_width;
+        this.screen_height = canvas_height;
+
+        this.ctx = this.canvas.getContext("2d", {alpha: true});
+        this.bg1_ctx = this.bg1.getContext("2d", {alpha: false});
+        this.bg2_ctx = this.bg2.getContext("2d", {alpha: true});
+        this.bg3_ctx = this.bg3.getContext("2d", {alpha: true});
         this.offscreen = this.createCanvas(this.screen_width, this.screen_height);
         this.offscreen_ctx = this.offscreen.getContext("2d", {alpha: true});
 
@@ -39,8 +44,6 @@ class GameUI {
             ctx.textBaseline = "top"; // 文字基线
             ctx.font = this.font_size + "px " + Constant.FONT_FAMILY; // 字体
         }
-
-        this.ga = new GameAudio();
     }
 
     getRange() {

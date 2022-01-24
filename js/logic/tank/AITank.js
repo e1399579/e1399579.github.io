@@ -42,11 +42,11 @@ class AITank extends Tank {
     }
 
     setDirect(direct) {
+        // 转向时修正坐标
+        [this.x, this.y] = this.alignPoint(this.direct, direct, this.x, this.y);
         this.direct = direct;
         this.counter = 0;
         this.turn_counter = Math.rand(10, this.max_counter);
-        // 转向时修正坐标
-        this.alignPoint();
     }
 
     isLimit() {
