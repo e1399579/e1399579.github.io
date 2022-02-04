@@ -67,7 +67,7 @@ class GameUI {
     async loadMaterials() {
         this.source = this.createImage('./images/General-Sprites.png');
         await this.source.decode();
-        let font = new FontFace('Press Start 2P', 'url(./fonts/PressStart2P-Regular.ttf)'); // font @see https://fonts.google.com/specimen/Press+Start+2P
+        let font = new FontFace(Constant.FONT_FAMILY, 'url(./fonts/PressStart2P-Regular.ttf)'); // font @see https://fonts.google.com/specimen/Press+Start+2P
         await font.load();
         document.fonts.add(font); // @see https://stackoverflow.com/questions/2756575/drawing-text-to-canvas-with-font-face-does-not-work-at-the-first-time
 
