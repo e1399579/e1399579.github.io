@@ -111,6 +111,9 @@ class PlayerTank extends Tank {
 
         this.fix_vertical = Math.ceil(this.width / 2);
         this.fix_horizontal = this.width - this.fix_vertical;
+        // 坦克体积发生变化，修正坐标
+        this.x = this.alignX(this.x);
+        this.y = this.alignY(this.y);
     }
 
     shot(ga) {
