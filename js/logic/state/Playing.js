@@ -876,8 +876,8 @@ class Playing extends GameState {
 
             let dist2 = this.getCenterDistance(p1, size1, p2, size2);
             if (dist2 > dist1) {
-                tank1.turn(direct);
                 if (direct === tank1.getDirect()) tank1.moveTo(p1.x, p1.y);
+                else tank1.turn(direct);
 
                 return true;
             }
