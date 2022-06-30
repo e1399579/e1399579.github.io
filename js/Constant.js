@@ -7,7 +7,7 @@ class Constant {
     static BASE_STAGE_HEIGHT = 208;
     static BASE_STAGE_OFFSET = 16;
     static BASE_FONT_SIZE = 8;
-    static FONT_FAMILY = '"Press Start 2P"';
+    static FONT_FAMILY = "Press_Start_2P";
     static FRAME_FACTOR = Constant.FPS / 60;
 
     // 速度：距离/帧数，单位：像素/帧
