@@ -35,6 +35,8 @@ class Playing extends GameState {
         this.stage_map = this.factory.loadMap();
         this.eagle = this.stage_map[24][12];
         this.played = 0;
+
+        this.choose_base_wall = this.chooseBaseWall(12 * Constant.FRAME_FACTOR);
     }
 
     action() {
@@ -135,6 +137,7 @@ class Playing extends GameState {
                     this.tasks.splice(i, 1); // 后面的元素前移，下一个任务还是i
                 } else {
                     // 未完成，但下一个可能已经开始，这里不break
+                    if (task.isLoop()) task.execute(this); // 循环任务再次执行
                     ++i;
                 }
             } else {
@@ -176,7 +179,7 @@ class Playing extends GameState {
                 // 禁用按键
                 this.onKeydown = () => {};
                 this.onKeyup = () => {};
-                // 禁用声音
+                // 禁用移动声音
                 this.ui.ga.stop("player_move");
             }
         } else if (this.isWin()) {
@@ -206,6 +209,8 @@ class Playing extends GameState {
                 }, 180 * Constant.FRAME_FACTOR, 0));
 
                 this.played = 1;
+                // 禁用移动声音
+                this.ui.ga.stop("player_move");
             }
         }
     }
@@ -925,5 +930,54 @@ class Playing extends GameState {
             }
             tank.moveTo(p2.x, p2.y);
         }
+    }
+
+    reinforceBaseWall() {
+        this.base_wall_pair = {};
+        this.base_wall_pair[Constant.MAP_STEEL] = [];
+        this.base_wall_pair[Constant.MAP_BRICK] = [];
+        this.switch_to_wall_type = Constant.MAP_STEEL;
+        
+        let base_wall_area = [[23, 11], [23, 12], [23, 13], [23, 14], [24, 11], [24, 14], [25, 11], [25, 14]];
+        for (let [row, col] of base_wall_area) {
+            // 初始化钢墙
+            let wall1 = this.factory.createSteel(row, col);
+            this.stage_map[row][col] = wall1;
+            this.base_wall_pair[Constant.MAP_STEEL].push(wall1);
+
+            // 初始化砖墙
+            let wall2 = this.factory.createBrick(row, col);
+            this.base_wall_pair[Constant.MAP_BRICK].push(wall2);
+        }
+        
+        // 标记改动
+        this.changed_tile.push(...this.base_wall_pair[Constant.MAP_STEEL]);
+    }
+
+    *chooseBaseWall(n) {
+        while(1) {
+            for (let i of [Constant.MAP_BRICK, Constant.MAP_STEEL]) {
+                for (let j = 0;j < n;++j) {
+                    yield i;
+                }
+            }
+        }
+    }
+
+    switchBaseWall() {
+        let type = this.choose_base_wall.next().value;
+        if (this.switch_to_wall_type === type) return;
+
+        this.switch_to_wall_type = type;
+        this.switchToWall(type);
+    }
+
+    switchToWall(type = Constant.MAP_STEEL) {
+        for (let wall of this.base_wall_pair[type]) {
+            let area = wall.getArea();
+            let [row, col] = area[0];
+            this.stage_map[row][col] = wall;
+        }
+        this.changed_tile.push(...this.base_wall_pair[type]);
     }
 }

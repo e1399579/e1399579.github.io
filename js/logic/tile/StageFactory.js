@@ -1186,7 +1186,7 @@ class StageFactory {
         let col = grids[Math.rand(0, 3)];
         let types = ["grenade", "helmet", "shovel", "star", "tank-life", "timer", "gun"];
         let type = types[Math.rand(0, types.length - 1)];
-        // type = "gun";
+        //type = "shovel";
         let x = col * this.square_size;
         let y = row * this.square_size;
         let prop;
@@ -1215,5 +1215,17 @@ class StageFactory {
         }
 
         return prop;
+    }
+
+    createSteel(i, j) {
+        let x = j * this.square_size;
+        let y = i * this.square_size;
+        return new Steel(x, y, [[i, j]]);
+    }
+
+    createBrick(i, j) {
+        let x = j * this.square_size;
+        let y = i * this.square_size;
+        return new Brick(x, y, [[i, j]]);
     }
 }

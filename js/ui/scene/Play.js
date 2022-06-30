@@ -177,24 +177,24 @@ class Play extends Scene {
         // 刷新被破坏的砖块
         let elements = this.state.getChangedTile();
         for (let element of elements) {
-            // 填充内容
-            if (!element.isDestroy()) {
-                // 未摧毁则需要重绘（可能形态与原来不一样），先擦除再绘制，再擦除部分区域
-                let rect = this.fixRect(element.getRect());
-                this.ui.bg1_ctx.fillStyle = "black";
-                this.ui.bg1_ctx.fillRect(...rect);
+            // 填充黑色（底色）
+            let rect = this.fixRect(element.getRect());
+            this.ui.bg1_ctx.fillStyle = "black";
+            this.ui.bg1_ctx.fillRect(...rect);
 
+            if (!element.isDestroy()) {
+                // 未摧毁则需要重绘（可能形态与原来不一样）
                 let type = element.getType();
                 let s_rect = this.ui.images['stage_map'][type];
                 this.ui.bg1_ctx.drawImage(this.ui.source, ...s_rect, ...rect);
-            }
 
-            // 填充黑色
-            let clear_rect = element.getClearRect();
-            if (clear_rect.length) {
-                clear_rect = this.fixRect(clear_rect);
-                this.ui.bg1_ctx.fillStyle = "black";
-                this.ui.bg1_ctx.fillRect(...clear_rect);
+                // 需要擦除的区域填充黑色
+                let clear_rect = element.getClearRect();
+                if (clear_rect.length) {
+                    clear_rect = this.fixRect(clear_rect);
+                    this.ui.bg1_ctx.fillStyle = "black";
+                    this.ui.bg1_ctx.fillRect(...clear_rect);
+                }
             }
         }
         this.state.setChangedComplete();

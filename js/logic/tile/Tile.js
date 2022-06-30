@@ -15,7 +15,7 @@ class Tile {
     }
 
     getClearRect() {
-        return this.rect;
+        return [];
     }
 
     getPoint() {

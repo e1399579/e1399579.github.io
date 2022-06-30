@@ -1,8 +1,9 @@
 class TaskSchedule {
-    constructor(fn, delay, keep = 0) {
+    constructor(fn, delay, keep = 0, loop = false) {
         this.fn = fn;
         this.delay = delay;
         this.keep = keep;
+        this.loop = loop;
         this.executed = false;
         this.frame = 0;
     }
@@ -26,6 +27,10 @@ class TaskSchedule {
 
     isComplete() {
         return this.frame >= this.keep + this.delay;
+    }
+
+    isLoop() {
+        return this.loop;
     }
 
     getDelay() {
