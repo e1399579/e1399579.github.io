@@ -15,21 +15,25 @@ class AITank extends Tank {
         this.fix_vertical = Math.ceil(this.width / 2);
         this.fix_horizontal = this.width - this.fix_vertical;
 
-        this.max_counter = 208 * Constant.ZOOM;
+        this.max_counter = 104 * Constant.ZOOM;
         this.turn_counter = Math.rand(10, this.max_counter);
         this.limit_counter = 10;
     }
 
     turnOther() {
-        // let directs = this.getDirects();
-        // directs.splice(this.direct, 1);
-        // let direct = Math.rand(0, 2);
-        // let direct = Math.rand(0, 6);
-        // direct = Math.min(direct, 3);
         // 增加向下的概率，更快地找到鹰攻击
-        let directs = [0, 2, 3];
-        let direct = Math.min(directs.length - 1, Math.rand(0, 4));
-        this.setDirect(directs[direct]);
+        let direct;
+        let rand = Math.rand(1, 10);
+        if ((1 <= rand) && (rand <= 5)) {
+            direct = Constant.DIRECT_DOWN;
+        } else if ((6 <= rand) && (rand <= 7)) {
+            direct = Constant.DIRECT_LEFT;
+        } else if ((8 <= rand) && (rand <= 9)) {
+            direct = Constant.DIRECT_RIGHT;
+        } else {
+            direct = Constant.DIRECT_UP;
+        }
+        this.setDirect(direct);
     }
 
     isTurn() {

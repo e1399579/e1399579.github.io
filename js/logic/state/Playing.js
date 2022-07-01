@@ -316,13 +316,14 @@ class Playing extends GameState {
             // 是否与建筑相交
             let element = this.isTankImpactTile(point, size, tank);
             if (element) {
-                if (element.canDestroy(tank)) {
-                    if (1 === Math.rand(1, 4)) {
-                    } else {
-                        this.chooseRightDirect(tank, this.isTankImpactTile);
-                    }
+                if (element.canDestroy(tank) && (1 === Math.rand(1, 5))) {
+                    // 能摧毁则使用20%机率保持该方向，避免推土机现象
                 } else {
-                    this.chooseRightDirect(tank, this.isTankImpactTile);
+                    this.chooseRightDirect(tank, function (p, size, tank) {
+                        // 防止两个方向都有墙卡死，比如21关右边
+                        let element = this.isTankImpactTile(p, size, tank);
+                        return element ? !element.canDestroy(tank) : false;
+                    });
                 }
 
                 continue;
@@ -827,10 +828,18 @@ class Playing extends GameState {
     }
 
     getWeightDirects() {
-        let directs = [3];
-        let part = [0, 2];
-        part.shuffle();
-        directs.push(...part, 1);
+        // 向下优先，左右平均，向上最低
+        let first, last;
+        if (1 === Math.rand(1, 5)) {
+            first = Constant.DIRECT_UP;
+            last = Constant.DIRECT_DOWN;
+        } else {
+            first = Constant.DIRECT_DOWN;
+            last = Constant.DIRECT_UP;
+        }
+        let mid = (1 === Math.rand(1, 2)) ? [Constant.DIRECT_LEFT, Constant.DIRECT_RIGHT] : [Constant.DIRECT_RIGHT, Constant.DIRECT_LEFT];
+        let directs = [];
+        directs.push(first, ...mid, last);
         return directs;
     }
 

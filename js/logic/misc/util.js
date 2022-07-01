@@ -1,5 +1,5 @@
 Math.rand = (min, max) => {
-    return Math.random() * (max - min + 1) | 0 + min;
+    return (Math.random() * (max - min + 1) | 0) + min;
 };
 
 Array.prototype.intersect = function(arr) {
